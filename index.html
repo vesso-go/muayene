@@ -24,7 +24,7 @@
   --bg:#101614; --surface:#18211e; --fg:#e6eeea; --muted:#9db0a8; --line:#2b3833;
   --accent:#3fbf8f; --accent-fg:#06140f; --ok:#4cc68a; --warn:#e3a84c; --bad:#ef7a6c;
   --ok-soft:#173326; --warn-soft:#382a15; --bad-soft:#3a1d19; color-scheme:dark}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
 .wrap{max-width:680px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:22px}
 h1,h2{font-family:var(--display);text-transform:uppercase;margin:0;line-height:1.05;text-wrap:balance}
 h1{font-size:clamp(2.2rem,9vw,3.2rem);font-weight:800}
@@ -73,7 +73,7 @@ function gcEvent(p,t){try{if(window.goatcounter&&window.goatcounter.count)window
 <div class="wrap">
   <header style="display:flex;flex-direction:column;gap:10px">
     <h1>Muayeneye Hazır mısın</h1>
-    <p class="lead">TÜVTÜRK'e gitmeden önce 10 dakikada aracını kendin kontrol et. Muayeneye giren her üç araçtan biri kusurlu çıkıyor ve çoğu zaman sebep yanmayan bir ampul ya da eksik bir reflektör gibi basit bir şey oluyor. Her maddeye cevap ver, sonunda neyi düzeltmen gerektiğini gör.</p>
+    <p class="lead">TÜVTÜRK'e gitmeden önce 10 dakikada aracını kendin kontrol et. Muayenede çıkan kusurların çoğu yanmayan bir ampul ya da eksik bir reflektör gibi basit şeyler. Her maddeye cevap ver, sonunda neyi düzeltmen gerektiğini gör.</p>
   </header>
 
   <div class="bar" aria-live="polite">
@@ -93,53 +93,53 @@ function gcEvent(p,t){try{if(window.goatcounter&&window.goatcounter.count)window
 (function(){
 var DATA=[
  {s:"Belgeler ve egzoz",i:[
-  {id:"belge",q:"Ruhsat, kimlik ve geçerli trafik sigortası yanında mı?",h:"Sigorta poliçesinin bitiş tarihine bak. Muayene günü yanında olmalı."},
-  {id:"emisyon",q:"Geçerli egzoz emisyon ölçümün var mı?",h:"Geçerli emisyon belgesi yoksa araç doğrudan kusurlu sayılır. Muayeneden birkaç gün önce yetkili bir yerde ölçtür.",heavy:1}
+  {id:"belge",q:"Ruhsat, kimlik ve geçerli trafik sigortası yanında mı?",h:"Sigorta poliçesinin bitiş tarihine bak. Muayene günü yanında olmalı.",f:"Ruhsatı, kimliği ve geçerli trafik sigortasını yanına al"},
+  {id:"emisyon",q:"Egzoz sağlam ve çıkan duman temiz mi?",h:"Emisyon ölçümü muayene sırasında TÜVTÜRK'te yapılıyor, ayrıca belge götürmen gerekmiyor. Yoğun siyah, mavi ya da beyaz duman ölçümde kalmana yol açabilir. Egzozda delik ya da aşırı ses de kusur sayılır.",f:"Egzozdaki duman ya da sızıntının sebebini bir ustaya baktır",heavy:1}
  ]},
  {s:"Gösterge paneli",i:[
-  {id:"ikaz",q:"Motor çalışırken panelde ikaz lambası (motor arıza, ABS, airbag) sönük mü?",h:"Kontağı aç, lambalar önce yanıp birkaç saniye içinde sönmeli. Sönmeyen lamba arıza demek.",heavy:1}
+  {id:"ikaz",q:"Motoru çalıştırınca panelde ikaz lambaları (motor arıza, ABS, airbag) sönüyor mu?",h:"Kontağı açınca lambalar yanar. Motoru çalıştırdıktan sonra birkaç saniye içinde hepsi sönmeli. Yanık kalan lamba arıza demek.",f:"Yanık kalan ikaz lambasının arızasını okut ve gider",heavy:1}
  ]},
  {s:"Işıklar",i:[
-  {id:"far",q:"Kısa ve uzun farlar ikisi de yanıyor mu?",h:"Karanlıkta bir duvara karşı dene. Far camı çok matsa polisaj gerekebilir.",heavy:1},
-  {id:"stop",q:"Fren lambalarının hepsi yanıyor mu? (üçüncü stop dahil)",h:"Birini frene bastır, sen arkadan bak. Tek kişiysen geri geri bir cama ya da duvara yanaşıp yansımaya bak.",heavy:1},
-  {id:"sinyal",q:"Dört sinyal, dörtlü flaşör ve geri vites lambası çalışıyor mu?",h:"Sinyal normalden hızlı yanıp sönüyorsa bir ampul yanmıyor olabilir."},
-  {id:"plaka",q:"Plaka lambası yanıyor ve plaka okunaklı mı?",h:"Sık unutulan bir madde. Plaka silik ya da standart dışı olmamalı."},
-  {id:"led",q:"Sonradan takılmış, standart dışı LED/xenon ampul yok mu?",h:"Onaysız LED dönüşümleri muayenede sorun çıkarabiliyor."}
+  {id:"far",q:"Kısa ve uzun farlar ikisi de yanıyor mu?",h:"Karanlıkta bir duvara karşı dene. Far camı çok matsa polisaj gerekebilir.",f:"Yanmayan far ampulünü değiştir",heavy:1},
+  {id:"stop",q:"Fren lambalarının hepsi yanıyor mu? (üçüncü stop dahil)",h:"Birini frene bastır, sen arkadan bak. Tek kişiysen geri geri bir cama ya da duvara yanaşıp yansımaya bak.",f:"Yanmayan fren lambası ampulünü değiştir",heavy:1},
+  {id:"sinyal",q:"Dört sinyal, dörtlü flaşör ve geri vites lambası çalışıyor mu?",h:"Sinyal normalden hızlı yanıp sönüyorsa bir ampul yanmıyor olabilir.",f:"Yanmayan sinyal ya da geri vites ampulünü değiştir"},
+  {id:"plaka",q:"Plaka lambası yanıyor ve plaka okunaklı mı?",h:"Sık unutulan bir madde. Plaka silik ya da standart dışı olmamalı.",f:"Plaka lambasını onar, plakayı okunur hale getir"},
+  {id:"led",q:"Far ve lambalardaki ampuller orijinal ya da onaylı mı?",h:"Sonradan takılmış onaysız LED/xenon dönüşümleri muayenede sorun çıkarabiliyor.",f:"Onaysız LED/xenon ampulleri orijinal ampullerle değiştir"}
  ]},
  {s:"Lastikler",i:[
-  {id:"dis",q:"Dört lastikte de diş derinliği yeterli mi?",h:"Yasal alt sınır 1,6 mm. 1 TL'yi oluğa koy: Yazının tamamı görünüyorsa diş yetersiz olabilir. Kışlıkta en az 4 mm önerilir.",heavy:1},
-  {id:"yanak",q:"Lastik yanaklarında kesik, şişlik ya da çatlak yok mu?",h:"Lastiğin yan yüzüne parmağınla dokun ve bak. Tek taraflı aşınma rot ayarı sorununa işaret eder.",heavy:1},
-  {id:"ebat",q:"Aynı akstaki lastikler aynı ebatta mı?",h:"Ön iki ve arka iki lastiğin ebatları kendi aralarında aynı olmalı. Ebat lastiğin yanında yazar."}
+  {id:"dis",q:"Dört lastikte de diş derinliği yeterli mi?",h:"Yasal alt sınır 1,6 mm. Lastik oluklarında küçük kabartılar (aşınma göstergesi) var. Diş bu kabartılarla aynı seviyeye inmişse lastik bitmiştir. Kışlıkta en az 4 mm önerilir.",f:"Dişi biten lastikleri değiştir",heavy:1},
+  {id:"yanak",q:"Lastik yanakları kesik, şişlik ve çatlak olmadan sağlam mı?",h:"Lastiğin yan yüzüne parmağınla dokunarak bak. Şişlik ya da derin kesik varsa lastik değişmeli.",f:"Yanağı hasarlı lastiği değiştir",heavy:1},
+  {id:"ebat",q:"Aynı akstaki lastikler aynı ebatta mı?",h:"Ön iki ve arka iki lastiğin ebatları kendi aralarında aynı olmalı. Ebat lastiğin yanında yazar.",f:"Aynı akstaki lastikleri aynı ebatta yap"}
  ]},
  {s:"Fren",i:[
-  {id:"hidrolik",q:"Fren hidroliği minimum çizginin üstünde mi?",h:"Kaputu aç, genelde sürücü tarafında küçük şeffaf bir hazne var. Seviye MIN ile MAX arasında olmalı."},
-  {id:"elfren",q:"El freni aracı eğimde tutuyor mu?",h:"Hafif bir yokuşta el frenini çek, vitesi boşa al. Araç kaymamalı. Muayenede en sık kalınan maddelerden biri.",heavy:1},
-  {id:"cekme",q:"Fren yaparken araç bir tarafa çekmiyor, ses ya da titreme yapmıyor mu?",h:"Boş bir yolda düşük hızda sert fren yap. Direksiyon düz kalmalı. Ses veya titreşim balata ya da disk aşınmasına işaret eder.",heavy:1}
+  {id:"hidrolik",q:"Fren hidroliği minimum çizginin üstünde mi?",h:"Kaputu aç, genelde sürücü tarafında küçük şeffaf bir hazne var. Seviye MIN ile MAX arasında olmalı.",f:"Fren hidroliğini tamamla, kaçak var mı baktır"},
+  {id:"elfren",q:"El freni aracı eğimde tutuyor mu?",h:"Hafif bir yokuşta el frenini çek, vitesi boşa al. Araç kaymamalı. Muayenede en sık kalınan maddelerden biri.",f:"El frenini ayarlat",heavy:1},
+  {id:"cekme",q:"Fren yaparken araç düz gidiyor, ses ve titreme olmadan duruyor mu?",h:"Boş bir yolda düşük hızda sert fren yap. Direksiyon düz kalmalı. Ses veya titreşim balata ya da disk aşınmasına işaret eder.",f:"Fren sistemini (balata, disk) kontrol ettir",heavy:1}
  ]},
  {s:"Cam, ayna, silecek",i:[
-  {id:"cam",q:"Ön camda büyük ya da görüşü kapatan çatlak yok mu?",h:"40 cm'den uzun çatlaklar ve sürücünün görüş alanındaki çatlaklar kusur sayılır.",heavy:1},
-  {id:"ayna",q:"Dış aynaların hepsi yerinde ve sağlam mı?",h:"Kırık ya da eksik ayna kusur sayılır."},
-  {id:"silecek",q:"Silecekler iz bırakmadan siliyor ve cam suyu fışkırıyor mu?",h:"Yıpranmış silecek lastikleri ucuzdur, muayeneden önce değiştirmek kolay."}
+  {id:"cam",q:"Ön cam, görüşü kapatan çatlak olmadan sağlam mı?",h:"Sürücünün görüş alanındaki çatlaklar ve büyük çatlaklar kusur sayılır. Küçük taş izleri çoğu zaman tamirle kurtarılabilir.",f:"Ön camdaki çatlağı tamir ettir ya da camı değiştir",heavy:1},
+  {id:"ayna",q:"Dış aynaların hepsi yerinde ve sağlam mı?",h:"Kırık ya da eksik ayna kusur sayılır.",f:"Kırık ya da eksik dış aynayı yenile"},
+  {id:"silecek",q:"Silecekler iz bırakmadan siliyor ve cam suyu fışkırıyor mu?",h:"Yıpranmış silecek lastikleri ucuzdur, muayeneden önce değiştirmek kolay.",f:"Silecek lastiklerini değiştir, cam suyunu doldur"}
  ]},
  {s:"Güvenlik",i:[
-  {id:"kemer",q:"Bütün emniyet kemerleri çekilip kilitleniyor ve yırtık değil mi?",h:"Arka koltuklar dahil hepsini tek tek dene. Kemeri sertçe çektiğinde kilitlenmeli.",heavy:1},
-  {id:"korna",q:"Korna çalışıyor mu?",h:"Basit ama unutulan bir madde."},
-  {id:"direksiyon",q:"Direksiyonda boşluk, sürüşte vuruntu ya da tıkırtı yok mu?",h:"Kasisten geçerken gelen tıkırtı rot, rotil ya da amortisör sorununa işaret edebilir."}
+  {id:"kemer",q:"Bütün emniyet kemerleri çekilip kilitleniyor ve sağlam mı?",h:"Arka koltuklar dahil hepsini tek tek dene. Kemeri sertçe çektiğinde kilitlenmeli, kumaşta yırtık olmamalı.",f:"Arızalı ya da yırtık emniyet kemerini değiştir",heavy:1},
+  {id:"korna",q:"Korna çalışıyor mu?",h:"Basit ama unutulan bir madde.",f:"Kornayı tamir ettir"},
+  {id:"direksiyon",q:"Direksiyon boşluksuz, araç kasislerde tıkırtısız mı?",h:"Kasisten geçerken gelen tıkırtı rot, rotil ya da amortisör sorununa işaret edebilir.",f:"Direksiyon ve ön düzeni (rot, rotil, amortisör) kontrol ettir"}
  ]},
  {s:"Zorunlu ekipman",i:[
-  {id:"ilkyardim",q:"İlk yardım çantası tam ve son kullanma tarihleri geçmemiş mi?",h:"Çantanın üzerindeki tarihe bak. İçindekiler eksik olmamalı."},
-  {id:"tup",q:"Yangın söndürücü dolu ve tarihi geçmemiş mi?",h:"Otomobil için en az 1 kg, ABC sınıfı olmalı. Göstergesi yeşil bölgede olmalı."},
-  {id:"reflektor",q:"İki adet üçgen reflektör var mı?",h:"İki adet olmalı. Kırık ya da eksik parçalı olmamalı."},
-  {id:"stepne",q:"Stepne (ya da yedek lastik kiti), kriko ve bijon anahtarı yerinde mi?",h:"Bagaj zeminini kaldırıp kontrol et."}
+  {id:"ilkyardim",q:"İlk yardım çantası tam ve son kullanma tarihleri geçmemiş mi?",h:"Çantanın üzerindeki tarihe bak. İçindekiler eksik olmamalı.",f:"İlk yardım çantasını yenile"},
+  {id:"tup",q:"Yangın söndürücü dolu ve tarihi geçmemiş mi?",h:"Otomobil için en az 1 kg, ABC sınıfı olmalı. Göstergesi yeşil bölgede olmalı.",f:"Yangın söndürücüyü doldurt ya da yenisini al"},
+  {id:"reflektor",q:"İki adet üçgen reflektör var mı?",h:"İki adet olmalı. Kırık ya da eksik parçalı olmamalı.",f:"İki adet sağlam üçgen reflektör al"},
+  {id:"stepne",q:"Stepne (ya da yedek lastik kiti), kriko ve bijon anahtarı yerinde mi?",h:"Bagaj zeminini kaldırıp kontrol et. Muayenede her zaman bakılmayabilir ama yolda kalırsan lazım olur.",f:"Stepne, kriko ve bijon anahtarını tamamla"}
  ]},
- {s:"Araç LPG'liyse",opt:1,i:[
-  {id:"lpg",q:"LPG tankının süresi dolmamış ve sızdırmazlık belgen geçerli mi?",h:"Araç LPG'li değilse bu maddeyi \"Yok\" diye işaretle. Tank genelde üretimden itibaren 10 yıl geçerlidir.",na:1}
+ {s:"Araç LPG'liyse",i:[
+  {id:"lpg",q:"LPG tankının süresi dolmamış ve sızdırmazlık belgen geçerli mi?",h:"Araç LPG'li değilse bu maddeyi \"Yok\" diye işaretle. Tank genelde üretimden itibaren 10 yıl geçerlidir.",f:"LPG tankının ve sızdırmazlık belgesinin süresini yenilet",na:1}
  ]}
 ];
 var KEY="muayene-cevap-v1", ans={};
 try{ans=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){ans={};}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(ans));}catch(e){}}
-var list=document.getElementById("list"), all=[];
+var list=document.getElementById("list"), all=[], started=Object.keys(ans).length?1:0, done=0;
 DATA.forEach(function(sec){
   var wrap=document.createElement("section");wrap.className="sec";
   var h=document.createElement("h2");h.textContent=sec.s;wrap.appendChild(h);
@@ -153,7 +153,12 @@ DATA.forEach(function(sec){
     var opts=it.na?[["yes","Evet"],["no","Hayır"],["na","Yok"]]:[["yes","Evet"],["no","Hayır"],["idk","Bilmiyorum"]];
     opts.forEach(function(o){
       var x=document.createElement("button");x.type="button";x.dataset.v=o[0];x.textContent=o[1];x.setAttribute("aria-pressed","false");
-      x.addEventListener("click",function(){if(!Object.keys(ans).length)gcEvent("basladi","Kontrole başladı");if(o[0]==="no")gcEvent("hayir-"+it.id,"Hayır: "+it.q);ans[it.id]=(ans[it.id]===o[0])?undefined:o[0];if(ans[it.id]===undefined)delete ans[it.id];save();render();});
+      x.addEventListener("click",function(){
+        if(!started){started=1;gcEvent("basladi","Kontrole başladı");}
+        if(ans[it.id]===o[0])delete ans[it.id];else{ans[it.id]=o[0];if(o[0]==="no")gcEvent("hayir-"+it.id,"Hayır: "+it.q);}
+        save();
+        if(render()&&!done){done=1;gcEvent("bitirdi","Kontrolü bitirdi");}
+      });
       bt.appendChild(x);
     });
     d.appendChild(q);d.appendChild(hw);d.appendChild(bt);wrap.appendChild(d);
@@ -171,19 +176,24 @@ function render(){
   document.getElementById("pbar").style.width=(n/all.length*100)+"%";
   document.getElementById("ptxt").textContent=n+" / "+all.length+" cevaplandı";
   document.getElementById("pbad").textContent=bad.length?bad.length+" sorun":"";
-  if(n===all.length&&!window.__gcDone){window.__gcDone=1;gcEvent('bitirdi','Kontrolü bitirdi');}
   var r=document.getElementById("result"), heavy=bad.filter(function(x){return x.heavy;});
   var html="";
   if(n<all.length){r.className="result";html='<div class="stamp">Devam et</div><p>'+(all.length-n)+' madde kaldı. Hepsini cevapladığında sonucu burada göreceksin.</p>';}
   else if(heavy.length){r.className="result bad";html='<div class="stamp">Henüz hazır değil</div><p>Ağır kusur sayılabilecek '+heavy.length+' madde var. Bunları düzeltmeden gidersen büyük ihtimalle tekrar gitmen gerekir.</p>';}
   else if(bad.length||idk.length){r.className="result warn";html='<div class="stamp">Neredeyse hazır</div><p>Ağır kusur riski görünmüyor ama birkaç noktaya bakman iyi olur.</p>';}
   else{r.className="result ok";html='<div class="stamp">Hazır görünüyorsun</div><p>Kendi kontrolünde sorun çıkmadı. Fren dengesi ve far ayarı gibi ölçümleri istasyon yapacak. İyi yolculuklar!</p>';}
-  if(bad.length)html+='<h2>Düzeltilecekler</h2><ul>'+bad.map(function(x){return "<li>"+x.q.replace(/\?$/,"")+(x.heavy?" <b>(ağır kusur riski)</b>":"")+"</li>";}).join("")+'</ul>';
-  if(idk.length)html+='<h2>Emin olmadıkların</h2><ul>'+idk.map(function(x){return "<li>"+x.q.replace(/\?$/,"")+"</li>";}).join("")+'</ul><p class="how">Bunları bir ustaya ya da bilen bir arkadaşa kontrol ettir.</p>';
+  if(bad.length)html+='<h2>Düzeltilecekler</h2><ul>'+bad.map(function(x){return "<li>"+x.f+(x.heavy?" <b>(ağır kusur riski)</b>":"")+"</li>";}).join("")+'</ul>';
+  if(idk.length)html+='<h2>Emin olmadıkların</h2><ul>'+idk.map(function(x){return "<li>"+x.q+"</li>";}).join("")+'</ul><p class="how">Bunları bir ustaya ya da bilen bir arkadaşa kontrol ettir.</p>';
   r.innerHTML=html;
+  return n===all.length;
 }
-document.getElementById("reset").addEventListener("click",function(){ans={};save();render();});
-render();
+var rs=document.getElementById("reset"), rsT=0;
+rs.addEventListener("click",function(){
+  if(!rsT){rs.textContent="Emin misin? Silmek için tekrar bas";rsT=setTimeout(function(){rsT=0;rs.textContent="Cevapları temizle";},4000);return;}
+  clearTimeout(rsT);rsT=0;rs.textContent="Cevapları temizle";
+  ans={};started=0;done=0;save();render();
+});
+done=render()?1:0;
 })();
 </script>
 
