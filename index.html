@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="TÜVTÜRK muayenesine gitmeden önce aracını 10 dakikada kendin kontrol et. Ücretsiz, kayıt yok.">
+<title>Muayeneye Hazır mısın</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: muayene istasyonu formu — üstte ilerleme ve sonuç pulu, altta bölüm bölüm kontrol kartları */
+:root{
+  --bg:#eef2f0; --surface:#ffffff; --fg:#14211c; --muted:#5a6b64; --line:#d3ddd8;
+  --accent:#0f6b4f; --accent-fg:#ffffff; --ok:#1f8a5a; --warn:#b7791f; --bad:#c2392b;
+  --ok-soft:#dff1e7; --warn-soft:#f8ecd6; --bad-soft:#f8dedb;
+  --display:"Barlow Condensed",ui-sans-serif,system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",ui-sans-serif,system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101614; --surface:#18211e; --fg:#e6eeea; --muted:#9db0a8; --line:#2b3833;
+  --accent:#3fbf8f; --accent-fg:#06140f; --ok:#4cc68a; --warn:#e3a84c; --bad:#ef7a6c;
+  --ok-soft:#173326; --warn-soft:#382a15; --bad-soft:#3a1d19; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101614; --surface:#18211e; --fg:#e6eeea; --muted:#9db0a8; --line:#2b3833;
+  --accent:#3fbf8f; --accent-fg:#06140f; --ok:#4cc68a; --warn:#e3a84c; --bad:#ef7a6c;
+  --ok-soft:#173326; --warn-soft:#382a15; --bad-soft:#3a1d19; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:680px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:22px}
+h1,h2{font-family:var(--display);text-transform:uppercase;margin:0;line-height:1.05;text-wrap:balance}
+h1{font-size:clamp(2.2rem,9vw,3.2rem);font-weight:800}
+h2{font-size:1.35rem;font-weight:700;letter-spacing:.02em}
+p{margin:0;max-width:65ch}
+.lead{color:var(--muted)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;display:flex;flex-direction:column;gap:6px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.prog{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.prog-l{font-size:.85rem;color:var(--muted);display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.sec{display:flex;flex-direction:column;gap:10px}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.item.yes{border-color:var(--ok)}
+.item.no{border-color:var(--bad);background:var(--bad-soft)}
+.item.idk{border-color:var(--warn);background:var(--warn-soft)}
+.q{font-weight:700}
+.q .heavy{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--bad);margin-left:6px;white-space:nowrap}
+.how{font-size:.9rem;color:var(--muted)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btns button{font-family:var(--body);font-size:.92rem;font-weight:700;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:8px;padding:8px 14px;cursor:pointer;min-height:40px}
+.btns button:focus-visible,.reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btns button[aria-pressed="true"][data-v="yes"]{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.btns button[aria-pressed="true"][data-v="no"]{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.btns button[aria-pressed="true"][data-v="idk"]{background:var(--warn);border-color:var(--warn);color:var(--surface)}
+.result{border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px;background:var(--surface);border:2px solid var(--line)}
+.result.ok{border-color:var(--ok);background:var(--ok-soft)}
+.result.warn{border-color:var(--warn);background:var(--warn-soft)}
+.result.bad{border-color:var(--bad);background:var(--bad-soft)}
+.result ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
+.stamp{font-family:var(--display);font-size:1.8rem;font-weight:800;text-transform:uppercase;line-height:1}
+.reset{align-self:flex-start;font-family:var(--body);font-size:.85rem;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:4px 0}
+.foot{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+@media (prefers-reduced-motion:reduce){.prog i{transition:none}}
+</style>
+<script>
+// GoatCounter sayacı
+window.goatcounter={no_onload:false};
+function gcEvent(p,t){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:p,title:t||p,event:true});}catch(e){}}
+</script>
+<script data-goatcounter="https://vesso-go.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <h1>Muayeneye Hazır mısın</h1>
+    <p class="lead">TÜVTÜRK'e gitmeden önce 10 dakikada aracını kendin kontrol et. Muayeneye giren her üç araçtan biri kusurlu çıkıyor ve çoğu zaman sebep yanmayan bir ampul ya da eksik bir reflektör gibi basit bir şey oluyor. Her maddeye cevap ver, sonunda neyi düzeltmen gerektiğini gör.</p>
+  </header>
+
+  <div class="bar" aria-live="polite">
+    <div class="prog"><i id="pbar"></i></div>
+    <div class="prog-l"><span id="ptxt">0 / 0 cevaplandı</span><span id="pbad"></span></div>
+  </div>
+
+  <div id="list" style="display:flex;flex-direction:column;gap:26px"></div>
+
+  <div class="result" id="result"></div>
+  <button type="button" class="reset" id="reset">Cevapları temizle</button>
+
+  <p class="foot">Bu liste bir hazırlık rehberidir, muayeneden geçeceğinin garantisi değildir. Fren dengesi ve far ayarı gibi bazı ölçümler yalnızca istasyondaki cihazlarla yapılabilir. Güncel kurallar ve ücretler için TÜVTÜRK'ün resmi kaynaklarına bakın. Ağır kusurlu bulunan araçlar 30 gün içinde tekrar muayeneye girebilir.</p>
+</div>
+
+<script>
+(function(){
+var DATA=[
+ {s:"Belgeler ve egzoz",i:[
+  {id:"belge",q:"Ruhsat, kimlik ve geçerli trafik sigortası yanında mı?",h:"Sigorta poliçesinin bitiş tarihine bak. Muayene günü yanında olmalı."},
+  {id:"emisyon",q:"Geçerli egzoz emisyon ölçümün var mı?",h:"Geçerli emisyon belgesi yoksa araç doğrudan kusurlu sayılır. Muayeneden birkaç gün önce yetkili bir yerde ölçtür.",heavy:1}
+ ]},
+ {s:"Gösterge paneli",i:[
+  {id:"ikaz",q:"Motor çalışırken panelde ikaz lambası (motor arıza, ABS, airbag) sönük mü?",h:"Kontağı aç, lambalar önce yanıp birkaç saniye içinde sönmeli. Sönmeyen lamba arıza demek.",heavy:1}
+ ]},
+ {s:"Işıklar",i:[
+  {id:"far",q:"Kısa ve uzun farlar ikisi de yanıyor mu?",h:"Karanlıkta bir duvara karşı dene. Far camı çok matsa polisaj gerekebilir.",heavy:1},
+  {id:"stop",q:"Fren lambalarının hepsi yanıyor mu? (üçüncü stop dahil)",h:"Birini frene bastır, sen arkadan bak. Tek kişiysen geri geri bir cama ya da duvara yanaşıp yansımaya bak.",heavy:1},
+  {id:"sinyal",q:"Dört sinyal, dörtlü flaşör ve geri vites lambası çalışıyor mu?",h:"Sinyal normalden hızlı yanıp sönüyorsa bir ampul yanmıyor olabilir."},
+  {id:"plaka",q:"Plaka lambası yanıyor ve plaka okunaklı mı?",h:"Sık unutulan bir madde. Plaka silik ya da standart dışı olmamalı."},
+  {id:"led",q:"Sonradan takılmış, standart dışı LED/xenon ampul yok mu?",h:"Onaysız LED dönüşümleri muayenede sorun çıkarabiliyor."}
+ ]},
+ {s:"Lastikler",i:[
+  {id:"dis",q:"Dört lastikte de diş derinliği yeterli mi?",h:"Yasal alt sınır 1,6 mm. 1 TL'yi oluğa koy: Yazının tamamı görünüyorsa diş yetersiz olabilir. Kışlıkta en az 4 mm önerilir.",heavy:1},
+  {id:"yanak",q:"Lastik yanaklarında kesik, şişlik ya da çatlak yok mu?",h:"Lastiğin yan yüzüne parmağınla dokun ve bak. Tek taraflı aşınma rot ayarı sorununa işaret eder.",heavy:1},
+  {id:"ebat",q:"Aynı akstaki lastikler aynı ebatta mı?",h:"Ön iki ve arka iki lastiğin ebatları kendi aralarında aynı olmalı. Ebat lastiğin yanında yazar."}
+ ]},
+ {s:"Fren",i:[
+  {id:"hidrolik",q:"Fren hidroliği minimum çizginin üstünde mi?",h:"Kaputu aç, genelde sürücü tarafında küçük şeffaf bir hazne var. Seviye MIN ile MAX arasında olmalı."},
+  {id:"elfren",q:"El freni aracı eğimde tutuyor mu?",h:"Hafif bir yokuşta el frenini çek, vitesi boşa al. Araç kaymamalı. Muayenede en sık kalınan maddelerden biri.",heavy:1},
+  {id:"cekme",q:"Fren yaparken araç bir tarafa çekmiyor, ses ya da titreme yapmıyor mu?",h:"Boş bir yolda düşük hızda sert fren yap. Direksiyon düz kalmalı. Ses veya titreşim balata ya da disk aşınmasına işaret eder.",heavy:1}
+ ]},
+ {s:"Cam, ayna, silecek",i:[
+  {id:"cam",q:"Ön camda büyük ya da görüşü kapatan çatlak yok mu?",h:"40 cm'den uzun çatlaklar ve sürücünün görüş alanındaki çatlaklar kusur sayılır.",heavy:1},
+  {id:"ayna",q:"Dış aynaların hepsi yerinde ve sağlam mı?",h:"Kırık ya da eksik ayna kusur sayılır."},
+  {id:"silecek",q:"Silecekler iz bırakmadan siliyor ve cam suyu fışkırıyor mu?",h:"Yıpranmış silecek lastikleri ucuzdur, muayeneden önce değiştirmek kolay."}
+ ]},
+ {s:"Güvenlik",i:[
+  {id:"kemer",q:"Bütün emniyet kemerleri çekilip kilitleniyor ve yırtık değil mi?",h:"Arka koltuklar dahil hepsini tek tek dene. Kemeri sertçe çektiğinde kilitlenmeli.",heavy:1},
+  {id:"korna",q:"Korna çalışıyor mu?",h:"Basit ama unutulan bir madde."},
+  {id:"direksiyon",q:"Direksiyonda boşluk, sürüşte vuruntu ya da tıkırtı yok mu?",h:"Kasisten geçerken gelen tıkırtı rot, rotil ya da amortisör sorununa işaret edebilir."}
+ ]},
+ {s:"Zorunlu ekipman",i:[
+  {id:"ilkyardim",q:"İlk yardım çantası tam ve son kullanma tarihleri geçmemiş mi?",h:"Çantanın üzerindeki tarihe bak. İçindekiler eksik olmamalı."},
+  {id:"tup",q:"Yangın söndürücü dolu ve tarihi geçmemiş mi?",h:"Otomobil için en az 1 kg, ABC sınıfı olmalı. Göstergesi yeşil bölgede olmalı."},
+  {id:"reflektor",q:"İki adet üçgen reflektör var mı?",h:"İki adet olmalı. Kırık ya da eksik parçalı olmamalı."},
+  {id:"stepne",q:"Stepne (ya da yedek lastik kiti), kriko ve bijon anahtarı yerinde mi?",h:"Bagaj zeminini kaldırıp kontrol et."}
+ ]},
+ {s:"Araç LPG'liyse",opt:1,i:[
+  {id:"lpg",q:"LPG tankının süresi dolmamış ve sızdırmazlık belgen geçerli mi?",h:"Araç LPG'li değilse bu maddeyi \"Yok\" diye işaretle. Tank genelde üretimden itibaren 10 yıl geçerlidir.",na:1}
+ ]}
+];
+var KEY="muayene-cevap-v1", ans={};
+try{ans=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){ans={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ans));}catch(e){}}
+var list=document.getElementById("list"), all=[];
+DATA.forEach(function(sec){
+  var wrap=document.createElement("section");wrap.className="sec";
+  var h=document.createElement("h2");h.textContent=sec.s;wrap.appendChild(h);
+  sec.i.forEach(function(it){
+    all.push(it);
+    var d=document.createElement("div");d.className="item";d.id="it-"+it.id;
+    var q=document.createElement("div");q.className="q";q.textContent=it.q;
+    if(it.heavy){var b=document.createElement("span");b.className="heavy";b.textContent="Ağır kusur riski";q.appendChild(b);}
+    var hw=document.createElement("p");hw.className="how";hw.textContent=it.h;
+    var bt=document.createElement("div");bt.className="btns";
+    var opts=it.na?[["yes","Evet"],["no","Hayır"],["na","Yok"]]:[["yes","Evet"],["no","Hayır"],["idk","Bilmiyorum"]];
+    opts.forEach(function(o){
+      var x=document.createElement("button");x.type="button";x.dataset.v=o[0];x.textContent=o[1];x.setAttribute("aria-pressed","false");
+      x.addEventListener("click",function(){if(!Object.keys(ans).length)gcEvent("basladi","Kontrole başladı");if(o[0]==="no")gcEvent("hayir-"+it.id,"Hayır: "+it.q);ans[it.id]=(ans[it.id]===o[0])?undefined:o[0];if(ans[it.id]===undefined)delete ans[it.id];save();render();});
+      bt.appendChild(x);
+    });
+    d.appendChild(q);d.appendChild(hw);d.appendChild(bt);wrap.appendChild(d);
+  });
+  list.appendChild(wrap);
+});
+function render(){
+  var n=0,bad=[],idk=[];
+  all.forEach(function(it){
+    var v=ans[it.id], el=document.getElementById("it-"+it.id);
+    el.className="item"+(v==="yes"||v==="na"?" yes":v==="no"?" no":v==="idk"?" idk":"");
+    el.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.v===v?"true":"false");});
+    if(v)n++; if(v==="no")bad.push(it); if(v==="idk")idk.push(it);
+  });
+  document.getElementById("pbar").style.width=(n/all.length*100)+"%";
+  document.getElementById("ptxt").textContent=n+" / "+all.length+" cevaplandı";
+  document.getElementById("pbad").textContent=bad.length?bad.length+" sorun":"";
+  if(n===all.length&&!window.__gcDone){window.__gcDone=1;gcEvent('bitirdi','Kontrolü bitirdi');}
+  var r=document.getElementById("result"), heavy=bad.filter(function(x){return x.heavy;});
+  var html="";
+  if(n<all.length){r.className="result";html='<div class="stamp">Devam et</div><p>'+(all.length-n)+' madde kaldı. Hepsini cevapladığında sonucu burada göreceksin.</p>';}
+  else if(heavy.length){r.className="result bad";html='<div class="stamp">Henüz hazır değil</div><p>Ağır kusur sayılabilecek '+heavy.length+' madde var. Bunları düzeltmeden gidersen büyük ihtimalle tekrar gitmen gerekir.</p>';}
+  else if(bad.length||idk.length){r.className="result warn";html='<div class="stamp">Neredeyse hazır</div><p>Ağır kusur riski görünmüyor ama birkaç noktaya bakman iyi olur.</p>';}
+  else{r.className="result ok";html='<div class="stamp">Hazır görünüyorsun</div><p>Kendi kontrolünde sorun çıkmadı. Fren dengesi ve far ayarı gibi ölçümleri istasyon yapacak. İyi yolculuklar!</p>';}
+  if(bad.length)html+='<h2>Düzeltilecekler</h2><ul>'+bad.map(function(x){return "<li>"+x.q.replace(/\?$/,"")+(x.heavy?" <b>(ağır kusur riski)</b>":"")+"</li>";}).join("")+'</ul>';
+  if(idk.length)html+='<h2>Emin olmadıkların</h2><ul>'+idk.map(function(x){return "<li>"+x.q.replace(/\?$/,"")+"</li>";}).join("")+'</ul><p class="how">Bunları bir ustaya ya da bilen bir arkadaşa kontrol ettir.</p>';
+  r.innerHTML=html;
+}
+document.getElementById("reset").addEventListener("click",function(){ans={};save();render();});
+render();
+})();
+</script>
+
+</body>
+</html>
