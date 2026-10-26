@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="TÜVTÜRK muayenesine gitmeden önce aracını 10 dakikada kendin kontrol et. Ücretsiz, kayıt yok.">
 <title>Muayeneye Hazır mısın</title>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vesso-go.github.io/muayene/">
+<meta property="og:title" content="Muayeneye Hazır mısın? 10 dakikalık ücretsiz kontrol">
+<meta property="og:description" content="TÜVTÜRK'e gitmeden önce 25 maddede aracını kendin kontrol et. Kayıt yok, ücretsiz.">
+<meta property="og:image" content="https://vesso-go.github.io/muayene/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
@@ -57,6 +65,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .result ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
 .stamp{font-family:var(--display);font-size:1.8rem;font-weight:800;text-transform:uppercase;line-height:1}
 .reset{align-self:flex-start;font-family:var(--body);font-size:.85rem;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:4px 0}
+.offer{border:2px dashed var(--accent);border-radius:10px;padding:14px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.offer .code{font-family:var(--display);font-size:1.7rem;font-weight:800;letter-spacing:.06em;color:var(--accent)}
+.cta{align-self:flex-start;display:inline-block;font-family:var(--body);font-size:.95rem;font-weight:700;background:var(--accent);color:var(--accent-fg);border:0;border-radius:8px;padding:10px 16px;text-decoration:none;cursor:pointer;min-height:40px}
+.cta:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 .foot{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
 @media (prefers-reduced-motion:reduce){.prog i{transition:none}}
 </style>
@@ -84,6 +96,7 @@ function gcEvent(p,t){try{if(window.goatcounter&&window.goatcounter.count)window
   <div id="list" style="display:flex;flex-direction:column;gap:26px"></div>
 
   <div class="result" id="result"></div>
+  <button type="button" class="cta" id="share">Arkadaşına gönder</button>
   <button type="button" class="reset" id="reset">Cevapları temizle</button>
 
   <p class="foot">Bu liste bir hazırlık rehberidir, muayeneden geçeceğinin garantisi değildir. Fren dengesi ve far ayarı gibi bazı ölçümler yalnızca istasyondaki cihazlarla yapılabilir. Güncel kurallar ve ücretler için TÜVTÜRK'ün resmi kaynaklarına bakın. Ağır kusurlu bulunan araçlar 30 gün içinde tekrar muayeneye girebilir.</p>
@@ -136,7 +149,12 @@ var DATA=[
   {id:"lpg",q:"LPG tankının süresi dolmamış ve sızdırmazlık belgen geçerli mi?",h:"Araç LPG'li değilse bu maddeyi \"Yok\" diye işaretle. Tank genelde üretimden itibaren 10 yıl geçerlidir.",f:"LPG tankının ve sızdırmazlık belgesinin süresini yenilet",na:1}
  ]}
 ];
-var KEY="muayene-cevap-v1", ans={};
+// İndirim ortağı. Bir usta ile anlaşınca null yerine şu şekilde doldur:
+// {ad:"Ahmet Oto Lastik",yer:"Gebze",kod:"MUAYENE10",teklif:"Lastik değişiminde %10 indirim",tel:"905xxxxxxxxx",ilgili:["dis","yanak","ebat"]}
+// ilgili boş bırakılırsa her "Hayır" cevabında gösterilir. Adresin sonuna ?ornek eklenince örnek kutu görünür.
+var PARTNER=null;
+if(!PARTNER&&/[?&]ornek/.test(location.search))PARTNER={ad:"Örnek Oto Lastik",yer:"Gebze",kod:"MUAYENE10",teklif:"Lastik ve rot balans işlerinde %10 indirim",tel:"900000000000",ornek:1};
+var KEY="muayene-cevap-v1", ans={}, offerSeen=0;
 try{ans=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){ans={};}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(ans));}catch(e){}}
 var list=document.getElementById("list"), all=[], started=Object.keys(ans).length?1:0, done=0;
@@ -184,9 +202,22 @@ function render(){
   else{r.className="result ok";html='<div class="stamp">Hazır görünüyorsun</div><p>Kendi kontrolünde sorun çıkmadı. Fren dengesi ve far ayarı gibi ölçümleri istasyon yapacak. İyi yolculuklar!</p>';}
   if(bad.length)html+='<h2>Düzeltilecekler</h2><ul>'+bad.map(function(x){return "<li>"+x.f+(x.heavy?" <b>(ağır kusur riski)</b>":"")+"</li>";}).join("")+'</ul>';
   if(idk.length)html+='<h2>Emin olmadıkların</h2><ul>'+idk.map(function(x){return "<li>"+x.q+"</li>";}).join("")+'</ul><p class="how">Bunları bir ustaya ya da bilen bir arkadaşa kontrol ettir.</p>';
+  var rel=PARTNER&&bad.filter(function(x){return !PARTNER.ilgili||PARTNER.ilgili.indexOf(x.id)>-1;});
+  if(n===all.length&&rel&&rel.length){
+    var msg="Merhaba, muayene kontrol sitesinden geliyorum. İndirim kodum: "+PARTNER.kod;
+    html+='<div class="offer"><b>Düzeltmek için: '+PARTNER.ad+(PARTNER.yer?", "+PARTNER.yer:"")+'</b><p>'+PARTNER.teklif+'. Gidince bu kodu göster:</p><div class="code">'+PARTNER.kod+'</div><a class="cta" id="offer-go" target="_blank" rel="noopener" href="https://wa.me/'+PARTNER.tel+'?text='+encodeURIComponent(msg)+'">WhatsApp\'tan yaz</a></div>';
+    if(!offerSeen&&!PARTNER.ornek){offerSeen=1;gcEvent("kod-goster","İndirim kodu gösterildi");}
+  }
   r.innerHTML=html;
   return n===all.length;
 }
+document.getElementById("result").addEventListener("click",function(e){if(e.target.id==="offer-go"&&!PARTNER.ornek)gcEvent("kod-tikla","İndirim için WhatsApp'a tıkladı");});
+document.getElementById("share").addEventListener("click",function(){
+  var url="https://vesso-go.github.io/muayene/", txt="Muayeneye gitmeden önce aracını 10 dakikada kontrol et, ücretsiz: ";
+  gcEvent("paylas","Paylaş butonu");
+  if(navigator.share){navigator.share({title:"Muayeneye Hazır mısın",text:txt,url:url}).catch(function(){});}
+  else{window.open("https://wa.me/?text="+encodeURIComponent(txt+url),"_blank","noopener");}
+});
 var rs=document.getElementById("reset"), rsT=0;
 rs.addEventListener("click",function(){
   if(!rsT){rs.textContent="Emin misin? Silmek için tekrar bas";rsT=setTimeout(function(){rsT=0;rs.textContent="Cevapları temizle";},4000);return;}
